@@ -4,16 +4,18 @@ import { coolTheme } from "../themes/cool.js";
 import { darkTheme } from "../themes/dark.js";
 import { warmTheme } from "../themes/warm.js";
 
+const THEME_KEY = "inwards-and-onwards-theme";
+
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
+    const savedTheme = localStorage.getItem(THEME_KEY);
     return savedTheme ? JSON.parse(savedTheme) : coolTheme;
   });
 
   useEffect(() => {
-    localStorage.setItem("theme", JSON.stringify(theme));
+    localStorage.setItem(THEME_KEY, JSON.stringify(theme));
   }, [theme]);
 
   const cycleTheme = () => {
