@@ -1,10 +1,11 @@
+import { ThemeProvider } from "./contexts/ThemeContext";
 import Landing from "./pages/Landing";
 
 function App() {
   return (
-    <div className="App">
+    <ThemeProvider>
       <Landing />
-    </div>
+    </ThemeProvider>
   );
 }
 
