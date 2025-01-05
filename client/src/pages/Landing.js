@@ -1,11 +1,13 @@
 // src/pages/Landing.js
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ThemeSelector from "../components/ThemeSelector";
 import { useTheme } from "../contexts/ThemeContext";
 
 const LandingPage = () => {
-  const { theme, cycleTheme } = useTheme();
+  const { theme } = useTheme();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -16,7 +18,6 @@ const LandingPage = () => {
         <div
           className="w-8 h-8 rounded-full cursor-pointer"
           style={{ backgroundColor: theme.colors.surfaceAccent }}
-          onClick={cycleTheme}
         >
           {" "}
           <ThemeSelector />
@@ -46,6 +47,7 @@ const LandingPage = () => {
             onMouseOut={(e) => {
               e.currentTarget.style.backgroundColor = theme.colors.buttonBg;
             }}
+            onClick={() => navigate("/Login")}
           >
             LOGIN/REGISTER
           </button>
