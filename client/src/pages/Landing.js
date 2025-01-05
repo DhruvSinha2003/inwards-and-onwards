@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 import ThemeSelector from "../components/ThemeSelector";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -53,6 +54,7 @@ const LandingPage = () => {
           </button>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };
