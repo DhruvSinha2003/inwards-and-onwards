@@ -1,6 +1,7 @@
 // src/pages/Landing.js
 
 import React from "react";
+import ThemeSelector from "../components/ThemeSelector";
 import { useTheme } from "../contexts/ThemeContext";
 
 const LandingPage = () => {
@@ -16,9 +17,11 @@ const LandingPage = () => {
           className="w-8 h-8 rounded-full cursor-pointer"
           style={{ backgroundColor: theme.colors.surfaceAccent }}
           onClick={cycleTheme}
-        />
+        >
+          {" "}
+          <ThemeSelector />
+        </div>
       </nav>
-
       <main className="flex-1 flex items-center justify-center">
         <div className="text-center">
           <h1
@@ -30,7 +33,6 @@ const LandingPage = () => {
             <span className="block md:inline">ONWARDS</span>
           </h1>
 
-          {/* Login/Register Button */}
           <button
             className="font-serif tracking-wide text-xl px-12 py-4 transition-colors duration-300"
             style={{
