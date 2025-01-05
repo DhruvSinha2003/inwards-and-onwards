@@ -1,4 +1,3 @@
-// src/contexts/ThemeContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import { coolTheme } from "../themes/cool.js";
 import { darkTheme } from "../themes/dark.js";
@@ -16,6 +15,11 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem(THEME_KEY, JSON.stringify(theme));
+
+    // Update CSS variables
+    const root = document.documentElement;
+    root.style.setProperty("--scroll-thumb", theme.colors.textPrimary);
+    root.style.setProperty("--scroll-bg", theme.colors.bgPrimary);
   }, [theme]);
 
   const cycleTheme = () => {
