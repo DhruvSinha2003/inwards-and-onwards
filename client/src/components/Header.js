@@ -28,14 +28,14 @@ const Header = () => {
   return (
     <header
       className={`fixed left-1/2 -translate-x-1/2 top-6 flex items-center justify-between px-6 py-3 rounded-full w-96 transition-transform duration-300 ${
-        isVisible ? "transform translate-y-0" : "transform -translate-y-20"
+        isVisible ? "transform -translate-y-3" : "transform -translate-y-20"
       }`}
       style={{
-        backgroundColor: theme.colors.surfaceSecondary,
+        backgroundColor: theme.colors.surfaceAccent,
         boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
       }}
     >
-      <div className="p-1">
+      <div className="p-1 ">
         <ThemeSelector />
       </div>
 

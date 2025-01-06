@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ThemeShowcase from "./pages/ThemeShowcase";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/theme" element={<ThemeShowcase />} />
         </Routes>
       </Router>
     </ThemeProvider>
