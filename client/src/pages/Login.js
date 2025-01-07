@@ -2,13 +2,37 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeSelector from "../components/ThemeSelector";
+import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
+import api from "../utils/api";
 
 const Login = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await api.post("/api/auth/login", {
+        email,
+        password,
+      });
+      login(response.data.user, response.data.token);
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Invalid credentials");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div
@@ -32,13 +56,25 @@ const Login = () => {
           Sign In
         </h2>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {error && (
+            <div
+              className="p-3 rounded-md text-center"
+              style={{
+                backgroundColor: theme.colors.error,
+                color: theme.colors.buttonText,
+              }}
+            >
+              {error}
+            </div>
+          )}
+
           <div>
             <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-md font-serif border-2"
               style={{
                 backgroundColor: theme.colors.inputBg,
@@ -47,6 +83,7 @@ const Login = () => {
               }}
             />
           </div>
+
           <div>
             <input
               type="password"
@@ -61,32 +98,40 @@ const Login = () => {
               }}
             />
           </div>
+
           <button
-            type="button"
-            onClick={() => navigate("/home")}
+            type="submit"
+            disabled={isLoading}
             className="w-full py-3 rounded-md font-serif tracking-wide text-lg transition-colors duration-300 hover:opacity-90"
             style={{
               backgroundColor: theme.colors.buttonBg,
               color: theme.colors.buttonText,
             }}
           >
-            Sign In
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Signing in...
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </button>
 
-          <div className="flex flex-col items-center gap-4 mt-6">
+          <div className="flex justify-between items-center mt-6 text-sm">
             <Link
               to="/forgot-password"
-              className="font-serif text-sm hover:underline"
+              className="font-serif hover:underline"
               style={{ color: theme.colors.textSecondary }}
             >
-              Forgot Username or Password?
+              Forgot Password?
             </Link>
             <Link
               to="/register"
-              className="font-serif text-sm hover:underline"
+              className="font-serif hover:underline"
               style={{ color: theme.colors.textSecondary }}
             >
-              Create New Account
+              Create Account
             </Link>
           </div>
         </form>
