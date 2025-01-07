@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeSelector from "../components/ThemeSelector";
+import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
+import api from "../utils/api";
 
 const Register = () => {
   const { theme } = useTheme();
@@ -10,6 +12,30 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await api.post("/api/auth/register", {
+        email,
+        username,
+        password,
+      });
+      login(response.data.user, response.data.token);
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
+      navigate("/");
+    }
+  };
 
   return (
     <div
@@ -78,14 +104,22 @@ const Register = () => {
           </div>
           <button
             type="button"
-            onClick={() => navigate("/home")}
+            disabled={isLoading}
+            onClick={handleSubmit}
             className="w-full py-3 rounded-md font-serif tracking-wide text-lg transition-colors duration-300 hover:opacity-90"
             style={{
               backgroundColor: theme.colors.buttonBg,
               color: theme.colors.buttonText,
             }}
           >
-            Create Account
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Creating account...
+              </div>
+            ) : (
+              "Create Account"
+            )}
           </button>
 
           <div className="text-center mt-6">

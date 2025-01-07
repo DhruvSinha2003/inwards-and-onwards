@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData, token) => {
     localStorage.setItem("iao-token", token);
-    localStorage.setItem("iao-user", user, JSON.stringify(userData));
+    localStorage.setItem("iao-user", JSON.stringify(userData)); // Fix: Correct the user data storage
   };
 
   const logout = (userData, token) => {

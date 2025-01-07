@@ -3,9 +3,11 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+  console.log("JWT_SECRET: ", process.env.JWT_SECRET); // Log the value of JWT_SECRET
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is required but not defined.");
+  }
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 exports.register = async (req, res) => {
@@ -14,7 +16,7 @@ exports.register = async (req, res) => {
 
     let user = await User.findOne({ email });
     if (user) {
-      return res.statue(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
