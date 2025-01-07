@@ -17,23 +17,33 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Login attempt for email:", email);
     setIsLoading(true);
     setError("");
 
     try {
+      console.log("Making login API call...");
       const response = await api.post("/api/auth/login", {
         email,
         password,
       });
+
+      console.log("Login successful, response:", {
+        userId: response.data.user.id,
+        username: response.data.user.username,
+        token: response.data.token ? "Present" : "Missing",
+      });
+
       login(response.data.user, response.data.token);
+      console.log("Navigating to home page...");
       navigate("/");
     } catch (err) {
+      console.error("Login error:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center p-4"

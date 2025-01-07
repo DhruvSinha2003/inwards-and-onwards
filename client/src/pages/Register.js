@@ -9,32 +9,95 @@ import api from "../utils/api";
 const Register = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
+  const validateForm = () => {
+    console.log("Validating form data:", {
+      email: formData.email ? "Present" : "Missing",
+      username: formData.username ? "Present" : "Missing",
+      passwordLength: formData.password.length,
+      passwordsMatch: formData.password === formData.confirmPassword,
+    });
+
+    if (
+      !formData.email ||
+      !formData.username ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      setError("All fields are required");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+    if (formData.username.length < 3) {
+      setError("Username must be at least 3 characters long");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Registration attempt for:", {
+      email: formData.email,
+      username: formData.username,
+    });
+
+    if (!validateForm()) {
+      console.log("Form validation failed");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
 
     try {
+      console.log("Making registration API call...");
       const response = await api.post("/api/auth/register", {
-        email,
-        username,
-        password,
+        email: formData.email,
+        username: formData.username,
+        password: formData.password,
       });
+
+      console.log("Registration successful, response:", {
+        userId: response.data.user.id,
+        username: response.data.user.username,
+        token: response.data.token ? "Present" : "Missing",
+      });
+
       login(response.data.user, response.data.token);
+      console.log("Navigating to home page...");
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred");
+      console.error("Registration error:", err.response?.data || err.message);
+      setError(
+        err.response?.data?.message || "Registration failed. Please try again."
+      );
     } finally {
       setIsLoading(false);
-      navigate("/");
     }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
@@ -59,13 +122,26 @@ const Register = () => {
           Create Account
         </h2>
 
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div
+              className="p-3 rounded-md text-center"
+              style={{
+                backgroundColor: theme.colors.error,
+                color: theme.colors.buttonText,
+              }}
+            >
+              {error}
+            </div>
+          )}
+
           <div>
             <input
               type="email"
+              name="email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-md font-serif border-2"
               style={{
                 backgroundColor: theme.colors.inputBg,
@@ -74,12 +150,14 @@ const Register = () => {
               }}
             />
           </div>
+
           <div>
             <input
               type="text"
+              name="username"
               placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={formData.username}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-md font-serif border-2"
               style={{
                 backgroundColor: theme.colors.inputBg,
@@ -88,12 +166,14 @@ const Register = () => {
               }}
             />
           </div>
+
           <div>
             <input
               type="password"
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-md font-serif border-2"
               style={{
                 backgroundColor: theme.colors.inputBg,
@@ -102,10 +182,26 @@ const Register = () => {
               }}
             />
           </div>
+
+          <div>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-md font-serif border-2"
+              style={{
+                backgroundColor: theme.colors.inputBg,
+                color: theme.colors.inputText,
+                borderColor: theme.colors.inputBorder,
+              }}
+            />
+          </div>
+
           <button
-            type="button"
+            type="submit"
             disabled={isLoading}
-            onClick={handleSubmit}
             className="w-full py-3 rounded-md font-serif tracking-wide text-lg transition-colors duration-300 hover:opacity-90"
             style={{
               backgroundColor: theme.colors.buttonBg,
@@ -115,7 +211,7 @@ const Register = () => {
             {isLoading ? (
               <div className="flex items-center justify-center">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Creating account...
+                Creating Account...
               </div>
             ) : (
               "Create Account"

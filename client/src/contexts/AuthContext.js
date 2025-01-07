@@ -7,26 +7,47 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("AuthProvider: Checking localStorage for existing session");
     const token = localStorage.getItem("iao-token");
     const userData = localStorage.getItem("iao-user");
-    if (token && user) {
-      setUser(JSON.parse(userData));
+
+    if (token && userData) {
+      console.log("Found existing session:", {
+        token: token ? "Present" : "Missing",
+        userData: userData ? "Present" : "Missing",
+      });
+      try {
+        setUser(JSON.parse(userData));
+      } catch (err) {
+        console.error("Error parsing stored user data:", err);
+        // Clear invalid data
+        localStorage.removeItem("iao-token");
+        localStorage.removeItem("iao-user");
+      }
     }
     setLoading(false);
   }, []);
 
   const login = (userData, token) => {
+    console.log("AuthProvider: Setting user session", {
+      userData: userData ? "Present" : "Missing",
+      token: token ? "Present" : "Missing",
+    });
+    setUser(userData);
     localStorage.setItem("iao-token", token);
-    localStorage.setItem("iao-user", JSON.stringify(userData)); // Fix: Correct the user data storage
+    localStorage.setItem("iao-user", JSON.stringify(userData));
   };
 
-  const logout = (userData, token) => {
+  const logout = () => {
+    console.log("AuthProvider: Clearing user session");
+    setUser(null);
     localStorage.removeItem("iao-token");
     localStorage.removeItem("iao-user");
   };
+
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

@@ -1,26 +1,33 @@
-// src/pages/ForgotPassword.js
+// Updated ForgotPassword.js with email service
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeSelector from "../components/ThemeSelector";
 import { useTheme } from "../contexts/ThemeContext";
+import api from "../utils/api";
 
 const ForgotPassword = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [showCodeInput, setShowCodeInput] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmitEmail = () => {
-    // In a real app, this would send the verification code
-    setShowCodeInput(true);
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
 
-  const handleVerifyCode = () => {
-    // In a real app, this would verify the code
-    setShowNewPassword(true);
+    try {
+      await api.post("/api/auth/forgot-password", { email });
+      setSuccess("Password reset instructions have been sent to your email.");
+      setTimeout(() => navigate("/login"), 3000);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to process request");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,90 +52,64 @@ const ForgotPassword = () => {
           Reset Password
         </h2>
 
-        <form className="space-y-6">
-          {!showCodeInput && (
-            <div>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-md font-serif border-2"
-                style={{
-                  backgroundColor: theme.colors.inputBg,
-                  color: theme.colors.inputText,
-                  borderColor: theme.colors.inputBorder,
-                }}
-              />
-              <button
-                type="button"
-                onClick={handleSubmitEmail}
-                className="w-full py-3 rounded-md font-serif tracking-wide text-lg mt-6 transition-colors duration-300 hover:opacity-90"
-                style={{
-                  backgroundColor: theme.colors.buttonBg,
-                  color: theme.colors.buttonText,
-                }}
-              >
-                Send Code
-              </button>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div
+              className="p-3 rounded-md text-center"
+              style={{
+                backgroundColor: theme.colors.error,
+                color: theme.colors.buttonText,
+              }}
+            >
+              {error}
             </div>
           )}
 
-          {showCodeInput && !showNewPassword && (
-            <div>
-              <input
-                type="text"
-                placeholder="Enter verification code"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="w-full px-4 py-3 rounded-md font-serif border-2"
-                style={{
-                  backgroundColor: theme.colors.inputBg,
-                  color: theme.colors.inputText,
-                  borderColor: theme.colors.inputBorder,
-                }}
-              />
-              <button
-                type="button"
-                onClick={handleVerifyCode}
-                className="w-full py-3 rounded-md font-serif tracking-wide text-lg mt-6 transition-colors duration-300 hover:opacity-90"
-                style={{
-                  backgroundColor: theme.colors.buttonBg,
-                  color: theme.colors.buttonText,
-                }}
-              >
-                Verify Code
-              </button>
+          {success && (
+            <div
+              className="p-3 rounded-md text-center"
+              style={{
+                backgroundColor: theme.colors.success,
+                color: theme.colors.buttonText,
+              }}
+            >
+              {success}
             </div>
           )}
 
-          {showNewPassword && (
-            <div>
-              <input
-                type="password"
-                placeholder="Enter new password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-md font-serif border-2"
-                style={{
-                  backgroundColor: theme.colors.inputBg,
-                  color: theme.colors.inputText,
-                  borderColor: theme.colors.inputBorder,
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => navigate("/login")}
-                className="w-full py-3 rounded-md font-serif tracking-wide text-lg mt-6 transition-colors duration-300 hover:opacity-90"
-                style={{
-                  backgroundColor: theme.colors.buttonBg,
-                  color: theme.colors.buttonText,
-                }}
-              >
-                Reset Password
-              </button>
-            </div>
-          )}
+          <div>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 rounded-md font-serif border-2"
+              style={{
+                backgroundColor: theme.colors.inputBg,
+                color: theme.colors.inputText,
+                borderColor: theme.colors.inputBorder,
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 rounded-md font-serif tracking-wide text-lg transition-colors duration-300 hover:opacity-90"
+            style={{
+              backgroundColor: theme.colors.buttonBg,
+              color: theme.colors.buttonText,
+            }}
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Sending Reset Link...
+              </div>
+            ) : (
+              "Send Reset Link"
+            )}
+          </button>
 
           <div className="text-center mt-6">
             <Link
