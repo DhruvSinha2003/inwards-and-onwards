@@ -57,11 +57,13 @@ const ComponentShowcase = () => {
                 title="Morning Reflections"
                 date="January 8, 2025"
                 preview="Today started with a peaceful meditation session. The silence was broken only by the gentle patter of rain against my window..."
+                content="Today started with a peaceful meditation session. The silence was broken only by the gentle patter of rain against my window. These quiet moments have become increasingly precious to me, offering a sanctuary of calm before the day begins in earnest."
               />
               <JournalCard
                 title="Evening Thoughts"
                 date="January 7, 2025"
                 preview="As the sun sets on another day, I find myself reflecting on the small victories and lessons learned..."
+                content="As the sun sets on another day, I find myself reflecting on the small victories and lessons learned. Today was filled with unexpected challenges, but each one brought its own opportunity for growth."
               />
             </div>
           </section>

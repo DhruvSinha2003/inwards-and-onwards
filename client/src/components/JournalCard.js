@@ -1,9 +1,8 @@
-// src/components/JournalCard.js
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 
-export const JournalCard = ({ title, date, preview, content }) => {
+export const JournalCard = ({ title, date, preview, content = "" }) => {
   const { colors } = useTheme();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -18,6 +17,9 @@ export const JournalCard = ({ title, date, preview, content }) => {
       return () => document.removeEventListener("keydown", handleEscape);
     }
   }, [isPopupOpen]);
+
+  // Safely split content into paragraphs
+  const paragraphs = content?.split("\n") || [];
 
   return (
     <>
@@ -35,13 +37,13 @@ export const JournalCard = ({ title, date, preview, content }) => {
           className="text-xl font-serif mb-2"
           style={{ color: colors.textPrimary }}
         >
-          {title}
+          {title || "Untitled"}
         </h3>
         <p className="text-sm mb-4" style={{ color: colors.textSecondary }}>
-          {date}
+          {date || "No date"}
         </p>
         <p className="line-clamp-3" style={{ color: colors.textMuted }}>
-          {preview}
+          {preview || "No preview available"}
         </p>
       </div>
 
@@ -84,7 +86,7 @@ export const JournalCard = ({ title, date, preview, content }) => {
                 className="text-sm mb-2"
                 style={{ color: colors.textSecondary }}
               >
-                {date}
+                {date || "No date"}
               </p>
 
               {/* Title */}
@@ -92,7 +94,7 @@ export const JournalCard = ({ title, date, preview, content }) => {
                 className="text-2xl font-serif mb-6"
                 style={{ color: colors.textPrimary }}
               >
-                {title}
+                {title || "Untitled"}
               </h2>
 
               {/* Content */}
@@ -107,9 +109,13 @@ export const JournalCard = ({ title, date, preview, content }) => {
                     borderRadius: "4px",
                   }}
                 >
-                  {content.split("\n").map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
+                  {paragraphs.length > 0 ? (
+                    paragraphs.map((paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    ))
+                  ) : (
+                    <p>No content available</p>
+                  )}
                 </div>
               </div>
             </div>
