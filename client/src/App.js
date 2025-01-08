@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
 import ThemeShowcase from "./pages/ThemeShowcase";
 
 const ProtectedRoute = ({ children }) => {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             <Route
               path="/"

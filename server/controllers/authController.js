@@ -112,3 +112,43 @@ exports.forgotPassword = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Find user
+    const user = await User.findOne({
+      _id: decoded.userId,
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: "Invalid or expired reset token" });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update user password and clear reset token
+    user.password = hashedPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+
+    res.json({ message: "Password successfully reset" });
+  } catch (error) {
+    console.error(error);
+    if (error.name === "JsonWebTokenError") {
+      return res.status(400).json({ message: "Invalid reset token" });
+    }
+    res.status(500).json({ message: "Server error" });
+  }
+};
