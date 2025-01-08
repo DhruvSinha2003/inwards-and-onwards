@@ -15,11 +15,18 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email) {
+      setError("Please enter your email address");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
     setSuccess("");
 
     try {
+      const response = await api.post("api/auth/forgot-password", { email });
+      setSuccess(response.data.message);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to process request");
     } finally {

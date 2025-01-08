@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { register, login } = require("../controllers/authController");
+const {
+  register,
+  login,
+  forgotPassword,
+} = require("../controllers/authController");
 const { body } = require("express-validator");
 
 router.post(
@@ -18,5 +22,7 @@ router.post(
   [body("email").isEmail(), body("password").exists()],
   login
 );
+
+router.post("/forgot-password", [body("email").isEmail()], forgotPassword);
 
 module.exports = router;
