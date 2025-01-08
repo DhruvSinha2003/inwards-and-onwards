@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import ComponentShowcase from "./pages/ComponentShowcase";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
@@ -60,6 +61,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ThemeShowcase />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/component"
+              element={
+                <ProtectedRoute>
+                  <ComponentShowcase />
                 </ProtectedRoute>
               }
             />

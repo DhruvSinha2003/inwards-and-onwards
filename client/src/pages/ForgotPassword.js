@@ -1,13 +1,12 @@
 // Updated ForgotPassword.js with email service
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ThemeSelector from "../components/ThemeSelector";
 import { useTheme } from "../contexts/ThemeContext";
 import api from "../utils/api";
 
 const ForgotPassword = () => {
   const { theme } = useTheme();
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
