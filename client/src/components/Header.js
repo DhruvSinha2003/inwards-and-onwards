@@ -1,21 +1,21 @@
 import { User } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
 import ThemeSelector from "./ThemeSelector";
 
 const Header = () => {
   const { theme } = useTheme();
   const [isVisible, setIsVisible] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
-        // Scroll Down: Hide header
         setIsVisible(false);
       } else {
-        // Scroll Up: Show header
         setIsVisible(true);
       }
       lastScrollY = window.scrollY;
@@ -24,6 +24,10 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleProfile = () => {
+    navigate("/profile");
+  };
 
   return (
     <header
@@ -50,6 +54,7 @@ const Header = () => {
 
       <div className="p-1">
         <button
+          onClick={handleProfile}
           className="w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300"
           style={{
             backgroundColor: theme.colors.surfaceAccent,
