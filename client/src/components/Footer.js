@@ -19,8 +19,7 @@ const Footer = () => {
           Privacy Policy
         </span>
         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none w-48 text-center">
-          All journal entries, usernames, and passwords are securely hashed and
-          stored.
+          All journal entries, and passwords are securely hashed and stored.
         </div>
       </div>
 

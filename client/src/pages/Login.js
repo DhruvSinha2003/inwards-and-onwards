@@ -17,11 +17,6 @@ const Login = () => {
   const { login } = useAuth();
 
   const validateForm = () => {
-    console.log("Validating form data:", {
-      email: formData.email ? "Present" : "Missing",
-      password: formData.password ? "Present" : "Missing",
-    });
-
     if (!formData.email || !formData.password) {
       setError("All fields are required");
       return false;
@@ -31,48 +26,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt for email:", formData.email);
 
-    if (!validateForm()) {
-      console.log("Form validation failed");
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsLoading(true);
     setError("");
 
     try {
-      console.log("Making login API call with data:", {
-        email: formData.email,
-        password: formData.password ? "PROVIDED" : "MISSING",
-      });
-
       const response = await api.post("/api/auth/login", {
         email: formData.email,
         password: formData.password,
       });
 
-      console.log("Raw login response:", response);
-
-      if (!response.data || !response.data.token) {
-        throw new Error("Invalid response format from server");
-      }
-
-      console.log("Login successful, user data:", {
-        userId: response.data.user?.id,
-        username: response.data.user?.username,
-        hasToken: !!response.data.token,
-      });
-
       login(response.data.user, response.data.token);
       navigate("/");
     } catch (err) {
-      console.error("Full login error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Login failed. Please check your credentials and try again."
-      );
+      setError("Login failed. Please check your credentials and try again.");
     } finally {
       setIsLoading(false);
     }
