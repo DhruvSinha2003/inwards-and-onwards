@@ -15,7 +15,7 @@ router.post(
 
 router.post(
   "/login",
-  [body("email").isEmail, body("password").exists()],
+  [body("email").isEmail(), body("password").exists()],
   login
 );
 

@@ -20,9 +20,6 @@ const ForgotPassword = () => {
     setSuccess("");
 
     try {
-      await api.post("/api/auth/forgot-password", { email });
-      setSuccess("Password reset instructions have been sent to your email.");
-      setTimeout(() => navigate("/login"), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to process request");
     } finally {

@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeSelector from "../components/ThemeSelector";
@@ -9,41 +8,83 @@ import api from "../utils/api";
 const Login = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
+  const validateForm = () => {
+    console.log("Validating form data:", {
+      email: formData.email ? "Present" : "Missing",
+      password: formData.password ? "Present" : "Missing",
+    });
+
+    if (!formData.email || !formData.password) {
+      setError("All fields are required");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt for email:", email);
+    console.log("Login attempt for email:", formData.email);
+
+    if (!validateForm()) {
+      console.log("Form validation failed");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
 
     try {
-      console.log("Making login API call...");
-      const response = await api.post("/api/auth/login", {
-        email,
-        password,
+      console.log("Making login API call with data:", {
+        email: formData.email,
+        password: formData.password ? "PROVIDED" : "MISSING",
       });
 
-      console.log("Login successful, response:", {
-        userId: response.data.user.id,
-        username: response.data.user.username,
-        token: response.data.token ? "Present" : "Missing",
+      const response = await api.post("/api/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      console.log("Raw login response:", response);
+
+      if (!response.data || !response.data.token) {
+        throw new Error("Invalid response format from server");
+      }
+
+      console.log("Login successful, user data:", {
+        userId: response.data.user?.id,
+        username: response.data.user?.username,
+        hasToken: !!response.data.token,
       });
 
       login(response.data.user, response.data.token);
-      console.log("Navigating to home page...");
       navigate("/");
     } catch (err) {
-      console.error("Login error:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Invalid credentials");
+      console.error("Full login error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Login failed. Please check your credentials and try again."
+      );
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center p-4"
@@ -66,7 +107,7 @@ const Login = () => {
           Sign In
         </h2>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
             <div
               className="p-3 rounded-md text-center"
@@ -82,9 +123,10 @@ const Login = () => {
           <div>
             <input
               type="email"
+              name="email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-md font-serif border-2"
               style={{
                 backgroundColor: theme.colors.inputBg,
@@ -97,9 +139,10 @@ const Login = () => {
           <div>
             <input
               type="password"
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-md font-serif border-2"
               style={{
                 backgroundColor: theme.colors.inputBg,

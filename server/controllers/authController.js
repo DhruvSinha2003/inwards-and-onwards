@@ -46,19 +46,30 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  console.log("Login request received:", {
+    email: req.body.email,
+    hasPassword: !!req.body.password,
+  });
+
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (!user) {
+      console.log("User not found:", email);
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    console.log("User found, verifying password");
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
+      console.log("Password mismatch for user:", email);
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = generateToken(user._id);
+    console.log("Login successful, sending response");
 
     res.json({
       token,
@@ -69,7 +80,7 @@ exports.login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Server error during login:", error);
+    res.status(500).json({ message: "Server error during login" });
   }
 };

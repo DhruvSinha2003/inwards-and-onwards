@@ -1,15 +1,17 @@
+// src/utils/api.js
 import axios from "axios";
-
 const api = axios.create({
   baseURL: "http://localhost:5000",
+  timeout: 10000, // Add timeout to prevent infinite loading
 });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("iao-token");
-  console.log("API Interceptor:", {
-    endpoint: config.url,
+  console.log("API Request:", {
+    url: config.url,
     method: config.method,
-    hasToken: token ? "Yes" : "No",
+    data: config.data, // Log request data
+    headers: config.headers,
   });
 
   if (token) {
@@ -20,21 +22,21 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => {
-    console.log("API Response:", {
-      endpoint: response.config.url,
+    console.log("API Success:", {
+      url: response.config.url,
       status: response.status,
-      hasData: response.data ? "Yes" : "No",
+      data: response.data,
     });
     return response;
   },
   (error) => {
-    console.error("API Error:", {
-      endpoint: error.config?.url,
+    console.error("API Error Details:", {
+      url: error.config?.url,
       status: error.response?.status,
       message: error.response?.data?.message || error.message,
+      fullError: error,
     });
     return Promise.reject(error);
   }
 );
-
 export default api;
