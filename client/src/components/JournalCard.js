@@ -125,3 +125,5 @@ export const JournalCard = ({ title, date, preview, content = "" }) => {
     </>
   );
 };
+
+export default JournalCard;
