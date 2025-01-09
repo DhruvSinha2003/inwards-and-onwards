@@ -37,6 +37,9 @@ mongoose.connection.on("error", (err) => {
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
+const journalRoutes = require("./routes/journal");
+app.use("/api/journal", journalRoutes);
+
 app.use((err, req, res, next) => {
   console.error("Error Handler:", err.stack);
   res.status(500).json({
