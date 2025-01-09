@@ -66,22 +66,6 @@ const Profile = () => {
     return acc;
   }, {});
 
-  const chartData = Object.entries(monthlyData).map(([month, entries]) => ({
-    month,
-    entries,
-  }));
-
-  const pieData = entries.reduce(
-    (acc, entry) => {
-      entry.isPromptBased ? acc[0].value++ : acc[1].value++;
-      return acc;
-    },
-    [
-      { name: "Prompt Based", value: 0 },
-      { name: "Custom", value: 0 },
-    ]
-  );
-
   return (
     <div
       className="min-h-screen pt-28 transition-colors duration-300"

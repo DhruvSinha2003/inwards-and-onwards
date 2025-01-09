@@ -44,12 +44,12 @@ const Home = () => {
 
   return (
     <div
-      className="min-h-screen pt-20"
+      className="min-h-screen pt-24"
       style={{ backgroundColor: colors.bgPrimary }}
     >
       <Header />
       <div
-        className="max-w-5xl mx-auto px-4 py-12 rounded-lg"
+        className="max-w-5xl mx-auto px-4 py-12 rounded-lg "
         style={{ backgroundColor: colors.bgSecondary }}
       >
         <div className="text-center mb-20">
