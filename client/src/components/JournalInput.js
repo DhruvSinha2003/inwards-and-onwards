@@ -1,4 +1,3 @@
-// src/components/JournalInput.js
 import React from "react";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -19,3 +18,5 @@ export const JournalInput = ({ placeholder, value, onChange }) => {
     />
   );
 };
+
+export default JournalInput;

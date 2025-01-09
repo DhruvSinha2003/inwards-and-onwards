@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import JournalInput from "../components/JournalInput";
@@ -6,12 +7,13 @@ import SuccessMessage from "../components/SuccessMessage";
 import { useTheme } from "../contexts/ThemeContext";
 import api from "../utils/api";
 
-const FreeWriting = () => {
+const PromptWriting = () => {
   const { colors } = useTheme();
-  const [heading, setHeading] = useState("");
+  const location = useLocation();
   const [content, setContent] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
+  const prompt = location.state?.prompt;
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
@@ -21,13 +23,12 @@ const FreeWriting = () => {
   const handleSubmit = async () => {
     try {
       await api.post("/api/journal", {
-        heading,
+        isPromptBased: true,
+        promptText: prompt,
         content,
-        isPromptBased: false,
       });
 
       setShowSuccess(true);
-      setHeading("");
       setContent("");
       setWordCount(0);
 
@@ -50,23 +51,25 @@ const FreeWriting = () => {
         />
       )}
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <input
-          type="text"
-          placeholder="Enter your heading..."
-          value={heading}
-          onChange={(e) => setHeading(e.target.value)}
-          className="w-full text-2xl font-serif mb-6 p-4 rounded-lg"
-          style={{
-            backgroundColor: colors.inputBg,
-            color: colors.inputText,
-            borderColor: colors.borderPrimary,
-          }}
-        />
+        <div
+          className="mb-8 p-6 rounded-lg"
+          style={{ backgroundColor: colors.surfaceSecondary }}
+        >
+          <h2
+            className="text-xl font-serif mb-2"
+            style={{ color: colors.textSecondary }}
+          >
+            Writing Prompt:
+          </h2>
+          <p className="text-2xl" style={{ color: colors.textPrimary }}>
+            {prompt}
+          </p>
+        </div>
 
         <JournalInput
           value={content}
           onChange={handleContentChange}
-          placeholder="Start writing your thoughts..."
+          placeholder="Start writing your response..."
         />
 
         <div className="mt-4 flex justify-between items-center">
@@ -76,7 +79,7 @@ const FreeWriting = () => {
 
           <button
             onClick={handleSubmit}
-            disabled={!heading || !content}
+            disabled={!content}
             className="px-6 py-3 rounded-lg font-medium transition-opacity disabled:opacity-50"
             style={{
               backgroundColor: colors.buttonBg,
@@ -92,4 +95,4 @@ const FreeWriting = () => {
   );
 };
 
-export default FreeWriting;
+export default PromptWriting;

@@ -8,10 +8,13 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import ComponentShowcase from "./pages/ComponentShowcase";
 import ForgotPassword from "./pages/ForgotPassword";
+import FreeWriting from "./pages/FreeWriting";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import PromptCategories from "./pages/PromptCategories";
+import PromptWriting from "./pages/PromptWriting";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import ThemeShowcase from "./pages/ThemeShowcase";
@@ -54,6 +57,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/free-writing"
+              element={
+                <ProtectedRoute>
+                  <FreeWriting />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/prompt-categories"
+              element={
+                <ProtectedRoute>
+                  <PromptCategories />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/prompt-writing"
+              element={
+                <ProtectedRoute>
+                  <PromptWriting />
                 </ProtectedRoute>
               }
             />

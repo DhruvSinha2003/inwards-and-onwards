@@ -4,7 +4,6 @@ const router = express.Router();
 const { body } = require("express-validator");
 const auth = require("../middleware/auth"); // Assuming you have auth middleware
 
-// Import controller (to be created)
 const {
   createEntry,
   getEntries,
