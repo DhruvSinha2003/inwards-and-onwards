@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { useTheme } from "../contexts/ThemeContext";
@@ -6,6 +6,8 @@ import { useTheme } from "../contexts/ThemeContext";
 const Profile = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
+  const userDataString = localStorage.getItem("iao-user");
+  const userData = JSON.parse(userDataString);
 
   const handleBackClick = () => {
     navigate("/");
@@ -26,6 +28,9 @@ const Profile = () => {
       >
         Back to Home
       </button>
+      <span style={{ color: theme.colors.textPrimary }}>
+        {userData.username}
+      </span>
     </div>
   );
 };
