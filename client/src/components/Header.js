@@ -29,6 +29,10 @@ const Header = () => {
     navigate("/profile");
   };
 
+  const handleNavigateHome = () => {
+    navigate("/home");
+  };
+
   return (
     <header
       className={`fixed left-1/2 -translate-x-1/2 top-6 flex items-center justify-between px-6 py-3 rounded-full w-96 transition-transform duration-300 ${
@@ -44,8 +48,11 @@ const Header = () => {
       </div>
 
       <div
-        className="font-serif tracking-wider text-base flex items-center gap-2 px-4"
+        className="font-serif tracking-wider text-base flex items-center gap-2 px-4 cursor-pointer"
         style={{ color: theme.colors.textPrimary }}
+        onClick={handleNavigateHome}
+        role="button"
+        tabIndex={0}
       >
         <span>INWARDS</span>
         <span className="italic">&</span>
