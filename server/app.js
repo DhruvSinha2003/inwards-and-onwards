@@ -33,6 +33,7 @@ mongoose
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB connection error:", err);
 });
+mongoose.set("debug", true);
 
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);

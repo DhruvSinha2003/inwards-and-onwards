@@ -23,6 +23,7 @@ const FreeWriting = () => {
       await api.post("/api/journal", {
         heading,
         content,
+        promptText: "",
         isPromptBased: false,
       });
 

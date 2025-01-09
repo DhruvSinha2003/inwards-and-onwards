@@ -11,6 +11,11 @@ exports.createEntry = async (req, res) => {
 
     const { isPromptBased, promptText, heading, content } = req.body;
 
+    const wordCount = content.trim().split(/\s+/).length;
+    const charCount = content.length;
+    const preview =
+      content.substring(0, 150) + (content.length > 150 ? "..." : "");
+
     const entry = new JournalEntry({
       username: req.user.username,
       userId: req.user._id,
@@ -18,15 +23,19 @@ exports.createEntry = async (req, res) => {
       promptText,
       heading,
       content,
+      wordCount,
+      charCount,
+      preview,
     });
 
-    await entry.save();
+    const savedEntry = await entry.save();
 
     res.status(201).json({
       success: true,
-      data: entry,
+      data: savedEntry,
     });
   } catch (error) {
+    console.error("Journal creation error:", error);
     res.status(500).json({
       success: false,
       message: "Error creating journal entry",

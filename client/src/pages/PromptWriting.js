@@ -26,6 +26,7 @@ const PromptWriting = () => {
         isPromptBased: true,
         promptText: prompt,
         content,
+        heading: "",
       });
 
       setShowSuccess(true);
