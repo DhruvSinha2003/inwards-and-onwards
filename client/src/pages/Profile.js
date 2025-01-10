@@ -86,7 +86,7 @@ const Profile = () => {
           <div className="grid grid-cols-2 gap-4">
             <div
               className="p-4 rounded-lg"
-              style={{ backgroundColor: colors.bgAccent }}
+              style={{ backgroundColor: colors.surfaceAccent }}
             >
               <p style={{ color: colors.textSecondary }}>Username</p>
               <p className="text-xl" style={{ color: colors.textPrimary }}>
@@ -95,7 +95,7 @@ const Profile = () => {
             </div>
             <div
               className="p-4 rounded-lg"
-              style={{ backgroundColor: colors.bgAccent }}
+              style={{ backgroundColor: colors.surfaceAccent }}
             >
               <p style={{ color: colors.textSecondary }}>Email</p>
               <p className="text-xl" style={{ color: colors.textPrimary }}>
