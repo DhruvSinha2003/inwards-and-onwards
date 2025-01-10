@@ -64,18 +64,28 @@ const Profile = () => {
     return acc;
   }, {});
 
-  // Simple line graph for word count
   const WordCountGraph = () => {
     if (wordCountData.length === 0) return null;
 
     const width = 600;
     const height = 200;
-    const padding = 40;
+    const padding = {
+      top: 20,
+      right: 20,
+      bottom: 30,
+      left: 40,
+    };
 
     const maxWords = Math.max(...wordCountData.map((d) => d.words));
     const points = wordCountData.map((d, i) => ({
-      x: (i * (width - 2 * padding)) / (wordCountData.length - 1) + padding,
-      y: height - (d.words / maxWords) * (height - 2 * padding) - padding,
+      x:
+        (i * (width - padding.left - padding.right)) /
+          (wordCountData.length - 1) +
+        padding.left,
+      y:
+        height -
+        padding.bottom -
+        (d.words / maxWords) * (height - padding.top - padding.bottom),
     }));
 
     const pathD = points.reduce(
@@ -85,43 +95,58 @@ const Profile = () => {
     );
 
     return (
-      <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
-        <rect
-          x="0"
-          y="0"
-          width={width}
+      <div className="overflow-hidden rounded-lg">
+        <svg
+          width="100%"
           height={height}
-          fill={colors.surfacePrimary}
-          rx="8"
-        />
-        <path d={pathD} fill="none" stroke={colors.buttonBg} strokeWidth="2" />
-        {points.map((point, i) => (
-          <circle
-            key={i}
-            cx={point.x}
-            cy={point.y}
-            r="4"
-            fill={colors.buttonBg}
+          viewBox={`0 0 ${width} ${height}`}
+          style={{ display: "block" }}
+        >
+          <rect
+            x="0"
+            y="0"
+            width={width}
+            height={height}
+            fill={colors.surfacePrimary}
           />
-        ))}
-        <text
-          x={width / 2}
-          y={height - 10}
-          textAnchor="middle"
-          fill={colors.textSecondary}
-        >
-          Time →
-        </text>
-        <text
-          x={10}
-          y={height / 2}
-          transform={`rotate(-90 10 ${height / 2})`}
-          textAnchor="middle"
-          fill={colors.textSecondary}
-        >
-          Words
-        </text>
-      </svg>
+          <path
+            d={pathD}
+            fill="none"
+            stroke={colors.buttonBg}
+            strokeWidth="2"
+          />
+          {points.map((point, i) => (
+            <circle
+              key={i}
+              cx={point.x}
+              cy={point.y}
+              r="4"
+              fill={colors.buttonBg}
+            />
+          ))}
+          {/* Y-axis label */}
+          <text
+            x={padding.left / 2}
+            y={height / 2}
+            transform={`rotate(-90 ${padding.left / 2} ${height / 2})`}
+            textAnchor="middle"
+            fill={colors.textSecondary}
+            fontSize="12"
+          >
+            Words
+          </text>
+          {/* X-axis label */}
+          <text
+            x={width / 2}
+            y={height - 8}
+            textAnchor="middle"
+            fill={colors.textSecondary}
+            fontSize="12"
+          >
+            Time →
+          </text>
+        </svg>
+      </div>
     );
   };
 
@@ -132,68 +157,89 @@ const Profile = () => {
 
     const width = 600;
     const height = 200;
-    const padding = 40;
+    const padding = {
+      top: 20,
+      right: 20,
+      bottom: 40,
+      left: 40,
+    };
     const barPadding = 4;
-    const barWidth = (width - 2 * padding) / months.length - barPadding;
+    const barWidth =
+      (width -
+        padding.left -
+        padding.right -
+        (months.length - 1) * barPadding) /
+      months.length;
 
     const maxEntries = Math.max(...Object.values(monthlyData));
 
     return (
-      <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
-        <rect
-          x="0"
-          y="0"
-          width={width}
+      <div className="overflow-hidden rounded-lg">
+        <svg
+          width="100%"
           height={height}
-          fill={colors.surfacePrimary}
-          rx="8"
-        />
-        {months.map((month, i) => {
-          const barHeight =
-            (monthlyData[month] / maxEntries) * (height - 2 * padding);
-          const x = i * (barWidth + barPadding) + padding;
-          const y = height - barHeight - padding;
+          viewBox={`0 0 ${width} ${height}`}
+          style={{ display: "block" }}
+        >
+          <rect
+            x="0"
+            y="0"
+            width={width}
+            height={height}
+            fill={colors.surfacePrimary}
+          />
+          {months.map((month, i) => {
+            const barHeight =
+              (monthlyData[month] / maxEntries) *
+              (height - padding.top - padding.bottom);
+            const x = i * (barWidth + barPadding) + padding.left;
+            const y = height - padding.bottom - barHeight;
 
-          return (
-            <g key={month}>
-              <rect
-                x={x}
-                y={y}
-                width={barWidth}
-                height={barHeight}
-                fill={colors.buttonBg}
-                opacity={0.8}
-              />
-              <text
-                x={x + barWidth / 2}
-                y={height - padding + 5}
-                textAnchor="middle"
-                fill={colors.textSecondary}
-                fontSize="12"
-              >
-                {month}
-              </text>
-            </g>
-          );
-        })}
-        <text
-          x={width / 2}
-          y={height - 5}
-          textAnchor="middle"
-          fill={colors.textSecondary}
-        >
-          Months
-        </text>
-        <text
-          x={10}
-          y={height / 2}
-          transform={`rotate(-90 10 ${height / 2})`}
-          textAnchor="middle"
-          fill={colors.textSecondary}
-        >
-          Entries
-        </text>
-      </svg>
+            return (
+              <g key={month}>
+                <rect
+                  x={x}
+                  y={y}
+                  width={barWidth}
+                  height={barHeight}
+                  fill={colors.buttonBg}
+                  opacity={0.8}
+                />
+                <text
+                  x={x + barWidth / 2}
+                  y={height - padding.bottom + 16}
+                  textAnchor="middle"
+                  fill={colors.textSecondary}
+                  fontSize="12"
+                >
+                  {month}
+                </text>
+              </g>
+            );
+          })}
+          {/* Y-axis label */}
+          <text
+            x={padding.left / 2}
+            y={height / 2}
+            transform={`rotate(-90 ${padding.left / 2} ${height / 2})`}
+            textAnchor="middle"
+            fill={colors.textSecondary}
+            fontSize="12"
+          >
+            Entries
+          </text>
+          {/* X-axis label */}
+          <text
+            x={width / 2}
+            y={height - 8}
+            textAnchor="middle"
+            fill={colors.textSecondary}
+            fontSize="12"
+          >
+            Months
+          </text>
+        </svg>
+      </div>
     );
   };
 
