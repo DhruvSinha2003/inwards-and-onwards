@@ -86,6 +86,14 @@ const Profile = () => {
 
     return (
       <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
+        <rect
+          x="0"
+          y="0"
+          width={width}
+          height={height}
+          fill={colors.surfacePrimary}
+          rx="8"
+        />
         <path d={pathD} fill="none" stroke={colors.buttonBg} strokeWidth="2" />
         {points.map((point, i) => (
           <circle
@@ -132,6 +140,14 @@ const Profile = () => {
 
     return (
       <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
+        <rect
+          x="0"
+          y="0"
+          width={width}
+          height={height}
+          fill={colors.surfacePrimary}
+          rx="8"
+        />
         {months.map((month, i) => {
           const barHeight =
             (monthlyData[month] / maxEntries) * (height - 2 * padding);
@@ -150,7 +166,7 @@ const Profile = () => {
               />
               <text
                 x={x + barWidth / 2}
-                y={height - padding / 2}
+                y={height - padding + 5}
                 textAnchor="middle"
                 fill={colors.textSecondary}
                 fontSize="12"
@@ -162,7 +178,7 @@ const Profile = () => {
         })}
         <text
           x={width / 2}
-          y={height - 10}
+          y={height - 5}
           textAnchor="middle"
           fill={colors.textSecondary}
         >
@@ -205,8 +221,8 @@ const Profile = () => {
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold"
               style={{
-                backgroundColor: colors.surfaceAccent,
-                color: colors.textPrimary,
+                backgroundColor: colors.buttonBg,
+                color: colors.textInverted,
               }}
             >
               {user.username[0]?.toUpperCase()}
@@ -234,7 +250,7 @@ const Profile = () => {
               <div
                 key={stat.label}
                 className="p-6 rounded-xl text-center"
-                style={{ backgroundColor: colors.surfaceSecondary }}
+                style={{ backgroundColor: colors.surfaceAccent }}
               >
                 <p
                   className="text-sm mb-1"
@@ -282,7 +298,10 @@ const Profile = () => {
           </div>
 
           {/* Entries List */}
-          <div className="space-y-3">
+          <div
+            className="space-y-3 p-6 rounded-xl"
+            style={{ backgroundColor: colors.surfaceSecondary }}
+          >
             <h3
               className="text-lg font-medium"
               style={{ color: colors.textPrimary }}
@@ -294,7 +313,7 @@ const Profile = () => {
                 <div
                   key={entry._id}
                   className="p-4 rounded-xl flex justify-between items-center hover:opacity-90 transition-opacity cursor-pointer"
-                  style={{ backgroundColor: colors.surfaceSecondary }}
+                  style={{ backgroundColor: colors.surfacePrimary }}
                   onClick={() => navigate(`/edit/${entry._id}`)}
                 >
                   <div>
@@ -314,7 +333,10 @@ const Profile = () => {
                   </div>
                   <div
                     className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: colors.surfaceAccent }}
+                    style={{
+                      backgroundColor: colors.buttonBg,
+                      color: colors.textInverted,
+                    }}
                   >
                     →
                   </div>
