@@ -118,7 +118,7 @@ const PromptCategories = () => {
                   backgroundColor:
                     expandedCategory === category.name
                       ? colors.bgAccent
-                      : colors.surfaceSecondary,
+                      : colors.surfaceAccent,
                   color:
                     expandedCategory === category.name
                       ? colors.textAccent
@@ -147,7 +147,7 @@ const PromptCategories = () => {
                       key={prompt}
                       className="w-full p-4 rounded-lg text-left hover:opacity-90 transition-all duration-200 hover:translate-x-1"
                       style={{
-                        backgroundColor: colors.surfaceSecondary,
+                        backgroundColor: colors.surfaceAccent,
                         color: colors.textPrimary,
                       }}
                       onClick={() =>
