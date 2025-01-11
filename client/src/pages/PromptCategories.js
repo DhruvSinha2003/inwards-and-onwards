@@ -140,7 +140,12 @@ const PromptCategories = () => {
                         color: colors.textPrimary,
                       }}
                       onClick={() =>
-                        navigate("/prompt-writing", { state: { prompt } })
+                        navigate("/prompt-writing", {
+                          state: {
+                            prompt,
+                            fromPrompts: true,
+                          },
+                        })
                       }
                     >
                       {prompt}

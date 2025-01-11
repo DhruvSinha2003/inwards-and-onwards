@@ -1,4 +1,7 @@
-import { useState } from "react";
+// FreeWriting.jsx
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AlertDialog from "../components/AlertDialog";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import JournalInput from "../components/JournalInput";
@@ -8,14 +11,32 @@ import api from "../utils/api";
 
 const FreeWriting = () => {
   const { colors } = useTheme();
+  const navigate = useNavigate();
   const [heading, setHeading] = useState("");
   const [content, setContent] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showExitWarning, setShowExitWarning] = useState(false);
+
+  useEffect(() => {
+    // Handle browser back button
+    window.onbeforeunload = content || heading ? () => true : null;
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, [content, heading]);
 
   const handleContentChange = (e) => {
     setContent(e.target.value);
     setWordCount(e.target.value.trim().split(/\s+/).filter(Boolean).length);
+  };
+
+  const handleBack = () => {
+    if (content || heading) {
+      setShowExitWarning(true);
+    } else {
+      navigate("/");
+    }
   };
 
   const handleSubmit = async () => {
@@ -32,7 +53,10 @@ const FreeWriting = () => {
       setContent("");
       setWordCount(0);
 
-      setTimeout(() => setShowSuccess(false), 5000);
+      // Navigate to homepage after successful save
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } catch (error) {
       console.error("Failed to save journal entry");
     }
@@ -46,11 +70,32 @@ const FreeWriting = () => {
       <Header />
       {showSuccess && (
         <SuccessMessage
-          message="Journal entry saved successfully!"
+          message="Journal entry saved successfully! Redirecting..."
           onClose={() => setShowSuccess(false)}
         />
       )}
+
+      <AlertDialog
+        open={showExitWarning}
+        onClose={() => setShowExitWarning(false)}
+        title="Discard changes?"
+        description="You have unsaved changes. Are you sure you want to leave? Your progress will be lost."
+        cancelText="Stay"
+        confirmText="Discard"
+        onConfirm={() => navigate("/")}
+      />
+
       <main className="max-w-4xl mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <button
+            onClick={handleBack}
+            className="px-4 py-2 rounded-lg font-medium transition-opacity"
+            style={{ color: colors.textSecondary }}
+          >
+            ← Back
+          </button>
+        </div>
+
         <input
           type="text"
           placeholder="Enter your heading..."
