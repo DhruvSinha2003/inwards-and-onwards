@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import JournalCard from "../components/JournalCard";
+
 import {
   MonthlyEntriesChart,
   WordCountChart,
@@ -216,37 +218,14 @@ const Profile = () => {
               </div>
               {!loading &&
                 latestEntries.map((entry) => (
-                  <div
+                  <JournalCard
                     key={entry._id}
-                    className="p-4 rounded-xl flex justify-between items-center hover:opacity-90 transition-opacity cursor-pointer"
-                    style={{ backgroundColor: colors.surfacePrimary }}
-                    onClick={() => navigate(`/edit/${entry._id}`)}
-                  >
-                    <div>
-                      <h4
-                        className="font-medium"
-                        style={{ color: colors.textPrimary }}
-                      >
-                        {entry.heading || entry.promptText}
-                      </h4>
-                      <p
-                        className="text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        {new Date(entry.createdAt).toLocaleDateString()} •{" "}
-                        {entry.wordCount} words
-                      </p>
-                    </div>
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center"
-                      style={{
-                        backgroundColor: colors.buttonBg,
-                        color: colors.textInverted,
-                      }}
-                    >
-                      →
-                    </div>
-                  </div>
+                    entryId={entry._id}
+                    title={entry.heading || entry.promptText}
+                    date={new Date(entry.createdAt).toLocaleDateString()}
+                    preview={entry.preview}
+                    content={entry.content}
+                  />
                 ))}
             </div>
           </div>
@@ -281,40 +260,14 @@ const Profile = () => {
             <div className="space-y-3">
               {!loading &&
                 entries.map((entry) => (
-                  <div
+                  <JournalCard
                     key={entry._id}
-                    className="p-4 rounded-xl flex justify-between items-center hover:opacity-90 transition-opacity cursor-pointer"
-                    style={{ backgroundColor: colors.surfaceSecondary }}
-                    onClick={() => {
-                      navigate(`/edit/${entry._id}`);
-                      setShowAllEntries(false);
-                    }}
-                  >
-                    <div>
-                      <h4
-                        className="font-medium"
-                        style={{ color: colors.textPrimary }}
-                      >
-                        {entry.heading || entry.promptText}
-                      </h4>
-                      <p
-                        className="text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        {new Date(entry.createdAt).toLocaleDateString()} •{" "}
-                        {entry.wordCount} words
-                      </p>
-                    </div>
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center"
-                      style={{
-                        backgroundColor: colors.buttonBg,
-                        color: colors.textInverted,
-                      }}
-                    >
-                      →
-                    </div>
-                  </div>
+                    entryId={entry._id}
+                    title={entry.heading || entry.promptText}
+                    date={new Date(entry.createdAt).toLocaleDateString()}
+                    preview={entry.preview}
+                    content={entry.content}
+                  />
                 ))}
             </div>
           </div>

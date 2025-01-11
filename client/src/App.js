@@ -7,6 +7,7 @@ import {
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import ComponentShowcase from "./pages/ComponentShowcase";
+import EditJournal from "./pages/Edit";
 import ForgotPassword from "./pages/ForgotPassword";
 import FreeWriting from "./pages/FreeWriting";
 import Home from "./pages/Home";
@@ -83,6 +84,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PromptWriting />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit/:entryId"
+              element={
+                <ProtectedRoute>
+                  <EditJournal />
                 </ProtectedRoute>
               }
             />
