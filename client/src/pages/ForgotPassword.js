@@ -61,7 +61,7 @@ const ForgotPassword = () => {
               className="p-3 rounded-md text-center"
               style={{
                 backgroundColor: theme.colors.error,
-                color: theme.colors.buttonText,
+                color: theme.colors.accent,
               }}
             >
               {error}
@@ -73,7 +73,7 @@ const ForgotPassword = () => {
               className="p-3 rounded-md text-center"
               style={{
                 backgroundColor: theme.colors.success,
-                color: theme.colors.buttonText,
+                color: theme.colors.accent,
               }}
             >
               {success}

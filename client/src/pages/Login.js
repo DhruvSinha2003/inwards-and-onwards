@@ -82,7 +82,7 @@ const Login = () => {
               className="p-3 rounded-md text-center"
               style={{
                 backgroundColor: theme.colors.error,
-                color: theme.colors.buttonText,
+                color: theme.colors.accent,
               }}
             >
               {error}
