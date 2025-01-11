@@ -53,6 +53,7 @@ const ResetPassword = () => {
       });
 
       setSuccess(response.data.message);
+      setIsLoading(true);
       setTimeout(() => {
         navigate("/login");
       }, 3000);
@@ -84,7 +85,7 @@ const ResetPassword = () => {
             className="p-3 rounded-md text-center mb-4"
             style={{
               backgroundColor: theme.colors.error,
-              color: theme.colors.buttonText,
+              color: theme.colors.accent,
             }}
           >
             {error}
@@ -96,7 +97,7 @@ const ResetPassword = () => {
             className="p-3 rounded-md text-center mb-4"
             style={{
               backgroundColor: theme.colors.success,
-              color: theme.colors.buttonText,
+              color: theme.colors.accent,
             }}
           >
             {success}
@@ -146,7 +147,7 @@ const ResetPassword = () => {
             {isLoading ? (
               <div className="flex items-center justify-center">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Setting New Password...
+                Redirecting...
               </div>
             ) : (
               "Set New Password"
