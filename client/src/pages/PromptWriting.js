@@ -24,8 +24,6 @@ const PromptWriting = () => {
       navigate("/");
       return;
     }
-
-    // Handle browser back button
     window.onbeforeunload = content ? () => true : null;
     return () => {
       window.onbeforeunload = null;
@@ -58,7 +56,6 @@ const PromptWriting = () => {
       setContent("");
       setWordCount(0);
 
-      // Navigate to homepage after successful save
       setTimeout(() => {
         navigate("/");
       }, 2000);

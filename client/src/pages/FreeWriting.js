@@ -1,4 +1,3 @@
-// FreeWriting.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertDialog from "../components/AlertDialog";
@@ -19,7 +18,6 @@ const FreeWriting = () => {
   const [showExitWarning, setShowExitWarning] = useState(false);
 
   useEffect(() => {
-    // Handle browser back button
     window.onbeforeunload = content || heading ? () => true : null;
     return () => {
       window.onbeforeunload = null;
@@ -53,7 +51,6 @@ const FreeWriting = () => {
       setContent("");
       setWordCount(0);
 
-      // Navigate to homepage after successful save
       setTimeout(() => {
         navigate("/");
       }, 2000);

@@ -14,7 +14,6 @@ export const JournalCard = ({
   const navigate = useNavigate();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  // Handle escape key press
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") setIsPopupOpen(false);
@@ -26,17 +25,15 @@ export const JournalCard = ({
     }
   }, [isPopupOpen]);
 
-  // Safely split content into paragraphs
   const paragraphs = content?.split("\n") || [];
 
   const handleEdit = (e) => {
-    e.stopPropagation(); // Prevent card click event from firing
+    e.stopPropagation();
     navigate(`/edit/${entryId}`);
   };
 
   return (
     <>
-      {/* Card */}
       <div
         onClick={() => setIsPopupOpen(true)}
         className="p-6 rounded-lg cursor-pointer transition-all duration-300 hover:scale-102 relative"
@@ -74,7 +71,6 @@ export const JournalCard = ({
         </p>
       </div>
 
-      {/* Popup */}
       {isPopupOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 p-4 md:p-6"
@@ -94,7 +90,6 @@ export const JournalCard = ({
               borderLeft: `4px solid ${colors.accent}`,
             }}
           >
-            {/* Header with close and edit buttons */}
             <div className="absolute top-4 left-4 right-4 flex justify-between">
               <button
                 onClick={() => setIsPopupOpen(false)}
@@ -119,9 +114,7 @@ export const JournalCard = ({
               </button>
             </div>
 
-            {/* Content */}
             <div className="p-8 pt-16">
-              {/* Date */}
               <p
                 className="text-sm mb-2"
                 style={{ color: colors.textSecondary }}
@@ -129,7 +122,6 @@ export const JournalCard = ({
                 {date || "No date"}
               </p>
 
-              {/* Title */}
               <h2
                 className="text-2xl font-serif mb-6"
                 style={{ color: colors.textPrimary }}
@@ -137,7 +129,6 @@ export const JournalCard = ({
                 {title || "Untitled"}
               </h2>
 
-              {/* Content */}
               <div
                 className="prose max-w-none"
                 style={{ color: colors.textPrimary }}

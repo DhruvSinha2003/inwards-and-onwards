@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }) => {
         setUser(JSON.parse(userData));
       } catch (err) {
         console.error("Error parsing stored user data:", err);
-        // Clear invalid data
         localStorage.removeItem("iao-token");
         localStorage.removeItem("iao-user");
       }

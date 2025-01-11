@@ -1,4 +1,3 @@
-// Updated ForgotPassword.js with email service
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ThemeSelector from "../components/ThemeSelector";

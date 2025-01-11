@@ -113,7 +113,6 @@ const Profile = () => {
         </div>
 
         <div className="space-y-12">
-          {/* User Info */}
           <div className="flex gap-6 items-center">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold"
@@ -137,7 +136,6 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-3 gap-6">
             {[
               { label: "Entries", value: stats.totalEntries },
@@ -165,9 +163,7 @@ const Profile = () => {
             ))}
           </div>
 
-          {/* Main Content Grid */}
           <div className="grid lg:grid-cols-2 gap-8">
-            {/* Graphs Column */}
             <div className="space-y-8">
               <div
                 className="p-6 rounded-xl"
@@ -196,7 +192,6 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Recent Entries Column */}
             <div
               className="space-y-3 p-6 rounded-xl"
               style={{ backgroundColor: colors.surfaceSecondary }}
@@ -232,7 +227,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* All Entries Pane */}
       {showAllEntries && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"

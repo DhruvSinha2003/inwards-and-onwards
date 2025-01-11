@@ -1,4 +1,3 @@
-// controllers/journalController.js
 const JournalEntry = require("../models/journalEntry");
 const { validationResult } = require("express-validator");
 

@@ -1,4 +1,3 @@
-// src/pages/ComponentShowcase.js
 import React, { useState } from "react";
 import { ImageFrame } from "../components/ImageFrame";
 import { JournalCard } from "../components/JournalCard";
@@ -44,7 +43,6 @@ const ComponentShowcase = () => {
         </header>
 
         <main className="space-y-12">
-          {/* Journal Cards Section */}
           <section>
             <h2
               className="text-2xl font-serif mb-6"
@@ -68,7 +66,6 @@ const ComponentShowcase = () => {
             </div>
           </section>
 
-          {/* Journal Input Section */}
           <section>
             <h2
               className="text-2xl font-serif mb-6"
@@ -83,7 +80,6 @@ const ComponentShowcase = () => {
             />
           </section>
 
-          {/* Prompts Section */}
           <section>
             <h2
               className="text-2xl font-serif mb-6"
@@ -98,7 +94,6 @@ const ComponentShowcase = () => {
             </div>
           </section>
 
-          {/* Table Section */}
           <section>
             <h2
               className="text-2xl font-serif mb-6"
@@ -109,7 +104,6 @@ const ComponentShowcase = () => {
             <JournalTable entries={sampleEntries} />
           </section>
 
-          {/* Image Frames Section */}
           <section>
             <h2
               className="text-2xl font-serif mb-6"

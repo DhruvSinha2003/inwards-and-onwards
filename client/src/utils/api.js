@@ -48,31 +48,20 @@ api.interceptors.response.use(
           detail: errorResponse,
         })
       );
-    }
-    // Handle server errors
-    else if (error.response?.status >= 500) {
+    } else if (error.response?.status >= 500) {
       console.error("Server error:", errorResponse);
-    }
-    // Handle validation errors
-    else if (error.response?.status === 400) {
+    } else if (error.response?.status === 400) {
       console.error("Validation error:", errorResponse);
-    }
-    // Handle other client errors
-    else if (error.response?.status >= 400) {
+    } else if (error.response?.status >= 400) {
       console.error("Client error:", errorResponse);
-    }
-    // Handle network errors
-    else if (error.request) {
+    } else if (error.request) {
       console.error("Network error - no response received:", {
         ...errorResponse,
         request: error.request,
       });
-    }
-    // Handle other errors
-    else {
+    } else {
       console.error("Error:", errorResponse);
     }
-
     return Promise.reject(error);
   }
 );

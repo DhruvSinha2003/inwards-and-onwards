@@ -1,4 +1,3 @@
-// src/themes/warm.js
 export const warmTheme = {
   name: "warm",
   colors: {

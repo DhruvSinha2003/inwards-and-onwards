@@ -3,7 +3,6 @@ const User = require("../models/User");
 
 const auth = async (req, res, next) => {
   try {
-    // Get token from header
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
@@ -16,10 +15,8 @@ const auth = async (req, res, next) => {
       throw new Error("JWT_SECRET is required but not defined.");
     }
 
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Find user by id
     const user = await User.findById(decoded.userId).select("-password"); // Exclude password from the returned user object
 
     if (!user) {
@@ -28,7 +25,6 @@ const auth = async (req, res, next) => {
         .json({ message: "Token is valid but user not found" });
     }
 
-    // Add user to request object
     req.user = user;
     next();
   } catch (error) {

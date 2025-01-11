@@ -1,4 +1,3 @@
-// src/themes/dark.js
 export const darkTheme = {
   name: "dark",
   colors: {

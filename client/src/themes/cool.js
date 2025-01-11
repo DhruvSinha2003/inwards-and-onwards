@@ -1,4 +1,3 @@
-// src/themes/cool.js
 export const coolTheme = {
   name: "cool",
   colors: {
@@ -17,10 +16,6 @@ export const coolTheme = {
     textMuted: "#718096",
     textAccent: "#3182ce",
     textInverted: "#ffffff",
-
-    borderPrimary: "#e2e8f0",
-    borderSecondary: "#cbd5e0",
-    borderAccent: "#3182ce",
 
     buttonBg: "#3182ce",
     buttonText: "#ffffff",

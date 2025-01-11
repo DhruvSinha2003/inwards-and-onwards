@@ -12,7 +12,6 @@ const {
   deleteEntry,
 } = require("../controllers/journalController");
 
-// Create new journal entry
 router.post(
   "/",
   auth,
@@ -25,16 +24,12 @@ router.post(
   createEntry
 );
 
-// Get all entries for a user
 router.get("/", auth, getEntries);
 
-// Get specific entry
 router.get("/:id", auth, getEntry);
 
-// Update entry
 router.put("/:id", auth, [body("content").notEmpty().trim()], updateEntry);
 
-// Delete entry
 router.delete("/:id", auth, deleteEntry);
 
 module.exports = router;
