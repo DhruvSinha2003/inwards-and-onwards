@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import api from "../utils/api";
 
 const Profile = () => {
   const { colors } = useTheme();
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({
@@ -150,6 +152,10 @@ const Profile = () => {
     );
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/landing");
+  };
   // Simple bar graph for monthly entries
   const MonthlyEntriesGraph = () => {
     const months = Object.keys(monthlyData);
@@ -250,16 +256,29 @@ const Profile = () => {
     >
       <Header />
       <div className="max-w-5xl mx-auto px-6 py-8">
-        <button
-          onClick={() => navigate("/")}
-          className="mb-8 px-4 py-2 rounded-full text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
-          style={{
-            backgroundColor: colors.surfaceAccent,
-            color: colors.textPrimary,
-          }}
-        >
-          ← Back to Home
-        </button>
+        <div className="flex justify-between items-center mb-8">
+          <button
+            onClick={() => navigate("/")}
+            className="px-4 py-2 rounded-full text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
+            style={{
+              backgroundColor: colors.surfaceAccent,
+              color: colors.textPrimary,
+            }}
+          >
+            ← Back to Home
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 rounded-full text-sm hover:opacity-90 transition-opacity"
+            style={{
+              backgroundColor: colors.buttonBg,
+              color: colors.textInverted,
+            }}
+          >
+            Logout
+          </button>
+        </div>
 
         <div className="space-y-12">
           {/* User Info */}
