@@ -90,9 +90,20 @@ const PromptCategories = () => {
       style={{ backgroundColor: colors.bgPrimary }}
     >
       <Header />
+
       <main className="max-w-4xl mx-auto px-4 py-8">
+        <button
+          onClick={() => navigate("/")}
+          className="px-4 py-2 rounded-full text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
+          style={{
+            backgroundColor: colors.surfaceAccent,
+            color: colors.textPrimary,
+          }}
+        >
+          ← Back to Home
+        </button>
         <h1
-          className="text-3xl font-serif mb-8"
+          className="text-3xl font-serif mb-8 mt-8"
           style={{ color: colors.textPrimary }}
         >
           Choose a Writing Prompt

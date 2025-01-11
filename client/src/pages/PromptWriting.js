@@ -75,7 +75,7 @@ const PromptWriting = () => {
       <Header />
       {showSuccess && (
         <SuccessMessage
-          message="Journal entry saved successfully! Redirecting..."
+          message="Your Journal Entry is being saved, Please wait"
           onClose={() => setShowSuccess(false)}
         />
       )}
