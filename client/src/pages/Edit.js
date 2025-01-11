@@ -17,12 +17,13 @@ const EditJournal = () => {
   const [wordCount, setWordCount] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showExitWarning, setShowExitWarning] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchEntry = async () => {
-      // Check if ID exists
       if (!id) {
         console.error("No journal ID provided");
         setError("No journal ID provided");
@@ -50,7 +51,6 @@ const EditJournal = () => {
         console.error("Failed to fetch journal entry:", error);
         setError(error.message || "Failed to fetch journal entry");
         setIsLoading(false);
-        // Only navigate if it's a 404 or network error
         if (error.response?.status === 404 || !error.response) {
           setTimeout(() => navigate("/"), 2000);
         }
@@ -61,7 +61,6 @@ const EditJournal = () => {
   }, [id, navigate]);
 
   useEffect(() => {
-    // Handle browser back button
     window.onbeforeunload = content !== entry?.content ? () => true : null;
     return () => {
       window.onbeforeunload = null;
@@ -81,6 +80,20 @@ const EditJournal = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/api/journal/${id}`);
+      setSuccessMessage("Journal entry deleted successfully! Redirecting...");
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to delete journal entry:", error);
+      setError(error.message || "Failed to delete journal entry");
+    }
+  };
+
   const handleSubmit = async () => {
     if (!id) {
       console.error("No journal ID available for update");
@@ -94,9 +107,9 @@ const EditJournal = () => {
       });
       console.log("Update response:", response);
 
+      setSuccessMessage("Journal entry updated successfully! Redirecting...");
       setShowSuccess(true);
 
-      // Navigate to homepage after successful save
       setTimeout(() => {
         navigate("/");
       }, 2000);
@@ -138,7 +151,7 @@ const EditJournal = () => {
       <Header />
       {showSuccess && (
         <SuccessMessage
-          message="Journal entry updated successfully! Redirecting..."
+          message={successMessage}
           onClose={() => setShowSuccess(false)}
         />
       )}
@@ -153,6 +166,16 @@ const EditJournal = () => {
         onConfirm={() => navigate("/")}
       />
 
+      <AlertDialog
+        open={showDeleteConfirmation}
+        onClose={() => setShowDeleteConfirmation(false)}
+        title="Delete Entry?"
+        description="Are you sure you want to delete this journal entry? This action cannot be undone."
+        cancelText="Cancel"
+        confirmText="Delete"
+        onConfirm={handleDelete}
+      />
+
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <button
@@ -161,6 +184,12 @@ const EditJournal = () => {
             style={{ color: colors.textSecondary }}
           >
             ← Back
+          </button>
+          <button
+            onClick={() => setShowDeleteConfirmation(true)}
+            className="px-4 py-2 rounded-lg font-medium bg-red-500 text-white hover:bg-red-600 transition-colors"
+          >
+            Delete Entry
           </button>
         </div>
 
