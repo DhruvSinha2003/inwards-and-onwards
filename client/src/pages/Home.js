@@ -167,6 +167,7 @@ const Home = () => {
               recentEntries.map((entry) => (
                 <JournalCard
                   key={entry._id}
+                  entryId={entry._id}
                   title={entry.heading || entry.promptText}
                   date={new Date(entry.createdAt).toLocaleDateString()}
                   preview={entry.preview}

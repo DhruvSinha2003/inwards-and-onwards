@@ -18,11 +18,27 @@ const EditJournal = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showExitWarning, setShowExitWarning] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchEntry = async () => {
+      // Check if ID exists
+      if (!id) {
+        console.error("No journal ID provided");
+        setError("No journal ID provided");
+        setIsLoading(false);
+        return;
+      }
+
       try {
+        console.log("Fetching journal entry with ID:", id);
         const response = await api.get(`/api/journal/${id}`);
+        console.log("API Response:", response);
+
+        if (!response.data?.data) {
+          throw new Error("Invalid response format");
+        }
+
         const entryData = response.data.data;
         setEntry(entryData);
         setContent(entryData.content);
@@ -31,8 +47,13 @@ const EditJournal = () => {
         );
         setIsLoading(false);
       } catch (error) {
-        console.error("Failed to fetch journal entry");
-        navigate("/");
+        console.error("Failed to fetch journal entry:", error);
+        setError(error.message || "Failed to fetch journal entry");
+        setIsLoading(false);
+        // Only navigate if it's a 404 or network error
+        if (error.response?.status === 404 || !error.response) {
+          setTimeout(() => navigate("/"), 2000);
+        }
       }
     };
 
@@ -61,10 +82,17 @@ const EditJournal = () => {
   };
 
   const handleSubmit = async () => {
+    if (!id) {
+      console.error("No journal ID available for update");
+      return;
+    }
+
     try {
-      await api.put(`/api/journal/${id}`, {
+      console.log("Updating journal entry:", id);
+      const response = await api.put(`/api/journal/${id}`, {
         content,
       });
+      console.log("Update response:", response);
 
       setShowSuccess(true);
 
@@ -73,7 +101,8 @@ const EditJournal = () => {
         navigate("/");
       }, 2000);
     } catch (error) {
-      console.error("Failed to update journal entry");
+      console.error("Failed to update journal entry:", error);
+      setError(error.message || "Failed to update journal entry");
     }
   };
 
@@ -86,6 +115,17 @@ const EditJournal = () => {
         <div className="text-xl" style={{ color: colors.textPrimary }}>
           Loading...
         </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className="min-h-screen pt-20 flex items-center justify-center"
+        style={{ backgroundColor: colors.bgPrimary }}
+      >
+        <div className="text-xl text-red-500">Error: {error}</div>
       </div>
     );
   }

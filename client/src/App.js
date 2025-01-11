@@ -88,7 +88,7 @@ function App() {
               }
             />
             <Route
-              path="/edit/:entryId"
+              path="/edit/:id"
               element={
                 <ProtectedRoute>
                   <EditJournal />
