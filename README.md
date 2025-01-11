@@ -1,3 +1,5 @@
+![Inwards-and-Onwards](https://github.com/user-attachments/assets/2683465b-4ed1-4f94-b949-38435a2747ce)
+
 # Inwards & Onwards
 
 A mindful journaling application that helps you reflect, grow, and discover deeper insights about yourself. Built with the MERN stack.
