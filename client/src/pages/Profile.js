@@ -1,7 +1,12 @@
+import { LogOut } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import {
+  MonthlyEntriesChart,
+  WordCountChart,
+} from "../components/ProfileGraphs";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import api from "../utils/api";
@@ -12,6 +17,7 @@ const Profile = () => {
   const { logout } = useAuth();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAllEntries, setShowAllEntries] = useState(false);
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -66,188 +72,12 @@ const Profile = () => {
     return acc;
   }, {});
 
-  const WordCountGraph = () => {
-    if (wordCountData.length === 0) return null;
-
-    const width = 600;
-    const height = 200;
-    const padding = {
-      top: 20,
-      right: 20,
-      bottom: 30,
-      left: 40,
-    };
-
-    const maxWords = Math.max(...wordCountData.map((d) => d.words));
-    const points = wordCountData.map((d, i) => ({
-      x:
-        (i * (width - padding.left - padding.right)) /
-          (wordCountData.length - 1) +
-        padding.left,
-      y:
-        height -
-        padding.bottom -
-        (d.words / maxWords) * (height - padding.top - padding.bottom),
-    }));
-
-    const pathD = points.reduce(
-      (acc, point, i) =>
-        i === 0 ? `M ${point.x},${point.y}` : `${acc} L ${point.x},${point.y}`,
-      ""
-    );
-
-    return (
-      <div className="overflow-hidden rounded-lg">
-        <svg
-          width="100%"
-          height={height}
-          viewBox={`0 0 ${width} ${height}`}
-          style={{ display: "block" }}
-        >
-          <rect
-            x="0"
-            y="0"
-            width={width}
-            height={height}
-            fill={colors.surfacePrimary}
-          />
-          <path
-            d={pathD}
-            fill="none"
-            stroke={colors.buttonBg}
-            strokeWidth="2"
-          />
-          {points.map((point, i) => (
-            <circle
-              key={i}
-              cx={point.x}
-              cy={point.y}
-              r="4"
-              fill={colors.buttonBg}
-            />
-          ))}
-          {/* Y-axis label */}
-          <text
-            x={padding.left / 2}
-            y={height / 2}
-            transform={`rotate(-90 ${padding.left / 2} ${height / 2})`}
-            textAnchor="middle"
-            fill={colors.textSecondary}
-            fontSize="12"
-          >
-            Words
-          </text>
-          {/* X-axis label */}
-          <text
-            x={width / 2}
-            y={height - 8}
-            textAnchor="middle"
-            fill={colors.textSecondary}
-            fontSize="12"
-          >
-            Time →
-          </text>
-        </svg>
-      </div>
-    );
-  };
-
   const handleLogout = () => {
     logout();
     navigate("/landing");
   };
-  // Simple bar graph for monthly entries
-  const MonthlyEntriesGraph = () => {
-    const months = Object.keys(monthlyData);
-    if (months.length === 0) return null;
 
-    const width = 600;
-    const height = 200;
-    const padding = {
-      top: 20,
-      right: 20,
-      bottom: 40,
-      left: 40,
-    };
-    const barPadding = 4;
-    const barWidth =
-      (width -
-        padding.left -
-        padding.right -
-        (months.length - 1) * barPadding) /
-      months.length;
-
-    const maxEntries = Math.max(...Object.values(monthlyData));
-
-    return (
-      <div className="overflow-hidden rounded-lg">
-        <svg
-          width="100%"
-          height={height}
-          viewBox={`0 0 ${width} ${height}`}
-          style={{ display: "block" }}
-        >
-          <rect
-            x="0"
-            y="0"
-            width={width}
-            height={height}
-            fill={colors.surfacePrimary}
-          />
-          {months.map((month, i) => {
-            const barHeight =
-              (monthlyData[month] / maxEntries) *
-              (height - padding.top - padding.bottom);
-            const x = i * (barWidth + barPadding) + padding.left;
-            const y = height - padding.bottom - barHeight;
-
-            return (
-              <g key={month}>
-                <rect
-                  x={x}
-                  y={y}
-                  width={barWidth}
-                  height={barHeight}
-                  fill={colors.buttonBg}
-                  opacity={0.8}
-                />
-                <text
-                  x={x + barWidth / 2}
-                  y={height - padding.bottom + 16}
-                  textAnchor="middle"
-                  fill={colors.textSecondary}
-                  fontSize="12"
-                >
-                  {month}
-                </text>
-              </g>
-            );
-          })}
-          {/* Y-axis label */}
-          <text
-            x={padding.left / 2}
-            y={height / 2}
-            transform={`rotate(-90 ${padding.left / 2} ${height / 2})`}
-            textAnchor="middle"
-            fill={colors.textSecondary}
-            fontSize="12"
-          >
-            Entries
-          </text>
-          {/* X-axis label */}
-          <text
-            x={width / 2}
-            y={height - 8}
-            textAnchor="middle"
-            fill={colors.textSecondary}
-            fontSize="12"
-          >
-            Months
-          </text>
-        </svg>
-      </div>
-    );
-  };
+  const latestEntries = entries.slice(0, 3);
 
   return (
     <div
@@ -255,7 +85,7 @@ const Profile = () => {
       style={{ backgroundColor: colors.bgPrimary }}
     >
       <Header />
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={() => navigate("/")}
@@ -270,13 +100,13 @@ const Profile = () => {
 
           <button
             onClick={handleLogout}
-            className="px-4 py-2 rounded-full text-sm hover:opacity-90 transition-opacity"
+            className="px-4 py-2 rounded-full text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
             style={{
               backgroundColor: colors.buttonBg,
               color: colors.textInverted,
             }}
           >
-            Logout
+            <LogOut size={16} /> Logout
           </button>
         </div>
 
@@ -333,83 +163,163 @@ const Profile = () => {
             ))}
           </div>
 
-          {/* Graphs */}
-          <div className="space-y-8">
-            <div
-              className="p-6 rounded-xl"
-              style={{ backgroundColor: colors.surfaceSecondary }}
-            >
-              <h3
-                className="text-lg font-medium mb-4"
-                style={{ color: colors.textPrimary }}
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Graphs Column */}
+            <div className="space-y-8">
+              <div
+                className="p-6 rounded-xl"
+                style={{ backgroundColor: colors.surfaceSecondary }}
               >
-                Word Count Timeline
-              </h3>
-              <WordCountGraph />
-            </div>
-
-            <div
-              className="p-6 rounded-xl"
-              style={{ backgroundColor: colors.surfaceSecondary }}
-            >
-              <h3
-                className="text-lg font-medium mb-4"
-                style={{ color: colors.textPrimary }}
-              >
-                Monthly Entries
-              </h3>
-              <MonthlyEntriesGraph />
-            </div>
-          </div>
-
-          {/* Entries List */}
-          <div
-            className="space-y-3 p-6 rounded-xl"
-            style={{ backgroundColor: colors.surfaceSecondary }}
-          >
-            <h3
-              className="text-lg font-medium"
-              style={{ color: colors.textPrimary }}
-            >
-              Recent Entries
-            </h3>
-            {!loading &&
-              entries.map((entry) => (
-                <div
-                  key={entry._id}
-                  className="p-4 rounded-xl flex justify-between items-center hover:opacity-90 transition-opacity cursor-pointer"
-                  style={{ backgroundColor: colors.surfacePrimary }}
-                  onClick={() => navigate(`/edit/${entry._id}`)}
+                <h3
+                  className="text-lg font-medium mb-4"
+                  style={{ color: colors.textPrimary }}
                 >
-                  <div>
-                    <h4
-                      className="font-medium"
-                      style={{ color: colors.textPrimary }}
-                    >
-                      {entry.heading || entry.promptText}
-                    </h4>
-                    <p
-                      className="text-sm"
-                      style={{ color: colors.textSecondary }}
-                    >
-                      {new Date(entry.createdAt).toLocaleDateString()} •{" "}
-                      {entry.wordCount} words
-                    </p>
-                  </div>
+                  Word Count Timeline
+                </h3>
+                <WordCountChart data={wordCountData} colors={colors} />
+              </div>
+
+              <div
+                className="p-6 rounded-xl"
+                style={{ backgroundColor: colors.surfaceSecondary }}
+              >
+                <h3
+                  className="text-lg font-medium mb-4"
+                  style={{ color: colors.textPrimary }}
+                >
+                  Monthly Entries
+                </h3>
+                <MonthlyEntriesChart data={monthlyData} colors={colors} />
+              </div>
+            </div>
+
+            {/* Recent Entries Column */}
+            <div
+              className="space-y-3 p-6 rounded-xl"
+              style={{ backgroundColor: colors.surfaceSecondary }}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3
+                  className="text-lg font-medium"
+                  style={{ color: colors.textPrimary }}
+                >
+                  Recent Entries
+                </h3>
+                <button
+                  onClick={() => setShowAllEntries(true)}
+                  className="text-sm font-medium hover:opacity-80 transition-opacity"
+                  style={{ color: colors.buttonBg }}
+                >
+                  Show All
+                </button>
+              </div>
+              {!loading &&
+                latestEntries.map((entry) => (
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{
-                      backgroundColor: colors.buttonBg,
-                      color: colors.textInverted,
-                    }}
+                    key={entry._id}
+                    className="p-4 rounded-xl flex justify-between items-center hover:opacity-90 transition-opacity cursor-pointer"
+                    style={{ backgroundColor: colors.surfacePrimary }}
+                    onClick={() => navigate(`/edit/${entry._id}`)}
                   >
-                    →
+                    <div>
+                      <h4
+                        className="font-medium"
+                        style={{ color: colors.textPrimary }}
+                      >
+                        {entry.heading || entry.promptText}
+                      </h4>
+                      <p
+                        className="text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        {new Date(entry.createdAt).toLocaleDateString()} •{" "}
+                        {entry.wordCount} words
+                      </p>
+                    </div>
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center"
+                      style={{
+                        backgroundColor: colors.buttonBg,
+                        color: colors.textInverted,
+                      }}
+                    >
+                      →
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* All Entries Pane */}
+      {showAllEntries && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: colors.bgOverlay }}
+        >
+          <div
+            className="w-full max-w-3xl max-h-[80vh] overflow-y-auto rounded-2xl p-6"
+            style={{ backgroundColor: colors.surfacePrimary }}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3
+                className="text-xl font-bold"
+                style={{ color: colors.textPrimary }}
+              >
+                All Entries
+              </h3>
+              <button
+                onClick={() => setShowAllEntries(false)}
+                className="p-2 rounded-full hover:opacity-80 transition-opacity"
+                style={{ color: colors.textPrimary }}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="space-y-3">
+              {!loading &&
+                entries.map((entry) => (
+                  <div
+                    key={entry._id}
+                    className="p-4 rounded-xl flex justify-between items-center hover:opacity-90 transition-opacity cursor-pointer"
+                    style={{ backgroundColor: colors.surfaceSecondary }}
+                    onClick={() => {
+                      navigate(`/edit/${entry._id}`);
+                      setShowAllEntries(false);
+                    }}
+                  >
+                    <div>
+                      <h4
+                        className="font-medium"
+                        style={{ color: colors.textPrimary }}
+                      >
+                        {entry.heading || entry.promptText}
+                      </h4>
+                      <p
+                        className="text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        {new Date(entry.createdAt).toLocaleDateString()} •{" "}
+                        {entry.wordCount} words
+                      </p>
+                    </div>
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center"
+                      style={{
+                        backgroundColor: colors.buttonBg,
+                        color: colors.textInverted,
+                      }}
+                    >
+                      →
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   );
