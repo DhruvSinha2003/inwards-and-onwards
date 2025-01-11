@@ -75,8 +75,10 @@ const Profile = () => {
   }, {});
 
   const handleLogout = () => {
-    logout();
-    navigate("/landing");
+    setTimeout(() => {
+      logout();
+      navigate("/landing");
+    }, 200);
   };
 
   const latestEntries = entries.slice(0, 3);
