@@ -30,7 +30,7 @@ const LandingPage = () => {
         <div className="max-w-4xl w-full">
           <div className="text-center mb-16">
             <div
-              className="inline-block px-6 py-1.5 rounded-full mb-6"
+              className="inline-block px-6 py-1.5 rounded-full mb-12"
               style={{ backgroundColor: theme.colors.bgAccent }}
             >
               <h2
@@ -42,7 +42,7 @@ const LandingPage = () => {
             </div>
 
             <h1
-              className="text-5xl md:text-6xl font-serif tracking-wider mb-8"
+              className="text-5xl md:text-6xl font-serif tracking-wider mb-12"
               style={{ color: theme.colors.textPrimary }}
             >
               <span className="block md:inline">INWARDS</span>
@@ -51,7 +51,7 @@ const LandingPage = () => {
             </h1>
 
             <p
-              className="text-xl mb-12 max-w-2xl mx-auto"
+              className="text-xl mb-16 max-w-2xl mx-auto"
               style={{ color: theme.colors.textSecondary }}
             >
               A mindful journaling companion that helps you reflect, grow, and

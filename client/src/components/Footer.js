@@ -14,7 +14,7 @@ const Footer = () => {
 
   return (
     <footer
-      className="w-full py-4 flex items-center justify-center gap-8"
+      className="w-full py-4 flex items-center justify-center gap-8 fixed bottom-0"
       style={{ backgroundColor: colors.bgPrimary }}
     >
       <div className="group relative">
