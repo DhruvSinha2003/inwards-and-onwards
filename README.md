@@ -2,7 +2,8 @@
 
 A mindful journaling application that helps you reflect, grow, and discover deeper insights about yourself. Built with the MERN stack.
 
-## Screenshots
+## UI
+![Inwards-and-Onwards](https://github.com/user-attachments/assets/22b0252f-b633-4ff3-a5ea-4f8a48c25d34)
 
 ## Features
 
@@ -21,6 +22,7 @@ A mindful journaling application that helps you reflect, grow, and discover deep
 - **Secure & Private**
   - User authentication and authorization
   - Secure password management
+  - Forget password recovery
 
 ## Quick Start
 
