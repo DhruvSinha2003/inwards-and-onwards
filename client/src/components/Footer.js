@@ -1,10 +1,16 @@
 import { Github } from "lucide-react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
 
 const Footer = () => {
   const { colors } = useTheme();
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
+
+  const handlePrivacy = () => {
+    navigate("/privacy");
+  };
 
   return (
     <footer
@@ -13,14 +19,12 @@ const Footer = () => {
     >
       <div className="group relative">
         <span
+          onClick={handlePrivacy}
           className="cursor-pointer text-sm hover:opacity-80 transition-opacity"
           style={{ color: colors.textPrimary }}
         >
           Privacy Policy
         </span>
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none w-48 text-center">
-          All journal entries, and passwords are securely hashed and stored.
-        </div>
       </div>
 
       <div className="group relative">

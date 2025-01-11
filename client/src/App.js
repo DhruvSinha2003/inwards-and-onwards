@@ -12,6 +12,7 @@ import FreeWriting from "./pages/FreeWriting";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import PromptCategories from "./pages/PromptCategories";
 import PromptWriting from "./pages/PromptWriting";
@@ -38,6 +39,7 @@ function App() {
       <ThemeProvider>
         <Router>
           <Routes>
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
